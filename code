@@ -1,0 +1,104 @@
+//Write a program to create the file "student.txt". Use at least the class Student that should contain the appropriate methods
+//Write in the file details of a student as follows: registrationNumber, name, programme, dateOfBirth
+//The program should read the file contents and print them on the screen
+//The program should be able to search for students taking a particular program
+
+import java.io.File;//Allows working with Files
+import java.io.FileWriter;//Allows writing to files
+import java.io.IOException;//Exception class for exception thrown when an error occurs while creating a file or writing in it
+import java.util.Scanner;
+import java.io.FileNotFoundException;//Exception class for exception thrown when an error occurs while reading a file
+
+
+public class Student{
+    
+    static void createFile(){
+        try{ //We put the File creation code as protected code(code within a try...catch block) because an IOException is thrown when the file fails to be created.
+        //This could be due to it already existing or any other error occurs. 
+        //An IOException is the general class of exceptions produced by failed or interrupted I/O operations.
+        File file = new File("students.txt");
+        //The File class is used to Create Files, Read Files, Update Files and Delete Files
+        if (file.createNewFile()==true){ //The createNewFile()  method is among the methods of the File class.
+        //It returns a boolean value true if the file was created successfully, and returns the boolean value false if the file already exists.
+            System.out.println("File created successfully.");
+            System.out.println("File name:" + file.getName());//The method getName() returns the name of the file created. It is also a method of the File class.
+        }
+        else{
+            System.out.println("The file already exists!");
+        }
+    }
+    
+    catch(IOException e){//e is a variable name(identifier) that is used to refer to the exception object that was thrown. 
+    //Any syntactically correct identifier can be used in place of "e" but it is the common convention of naming the exception variable.
+    System.out.println("File not created! \n An error occurred!");
+    e.printStackTrace();//printStackTrace() is a method that shows all the methods that had been called and the order in which they were called leading up to the error. 
+    //This is helpful in debugging.
+    }
+    }
+    
+  static void writeToFile(){
+      try{
+          FileWriter pen = new FileWriter("student.txt");//The FileWriter class provides a convinient way to write characters to a file.
+          pen.write("EB1/21/61, Victor, Computer Science, 12/03/03");//This is the method used to write some text to the file.
+          pen.write("EB2/45/67, Sam, Applied Computer Science, 23/09/02");
+          pen.write("ABSC/304/, Parlin, Economics, 04/10/01");
+          pen.write("EB7/56/78,Gina, Astrophysics, 09/03/01");
+          pen.write("ABSC/904, Tina, Economics, 08/06/00");
+          pen.write("EB1/30/75, Angie, Computer Science, 03/04/03");
+          pen.write("EB2/90/31, Dude, Applied Computer Science, 07/09/02");
+          pen.write("EB7/90/78, Sue, Astrophysics, 08/01/02");
+          pen.close();
+          System.out.println("Successfully wrote to the file.");
+      }
+      catch(IOException e){
+          System.out.println("An error occurred!");
+          e.printStackTrace();
+      }
+  }
+  
+  static void readFileContents(){
+      try{
+          File fileReader = new File("student.txt");
+          Scanner reader = new Scanner(fileReader);//The Scanner object takes the File object as the parameter since the File object represents the file student.txt 
+          //...that the program wants to read from making it a valid input source.
+          while(reader.hasNextLine()){//So long as there is a next Line to be read
+              String fileContents = reader.nextLine();//Read that next Line
+              System.out.println(fileContents);
+          }
+      }
+      catch(FileNotFoundException e){
+          System.out.println("An error occurred!");
+          e.printStackTrace();
+      }
+  }
+  
+  static void search() {
+    System.out.println("Enter the programme you want to search from.");
+    System.out.println("Choose from: Computer Science, Applied Computer Science, Astrophysics and Economics");
+    Scanner input = new Scanner(System.in);
+    String in = input.nextLine();
+
+    try {
+        File fileSearch = new File("student.txt");
+        Scanner search = new Scanner(fileSearch);
+
+        while (search.hasNextLine()) {
+            String searchResults = search.nextLine();
+            String[] fields = searchResults.split(", ");
+            if (fields.length >= 3 && fields[2].equalsIgnoreCase(in)) {
+                System.out.println(searchResults);
+            }
+        }
+    } catch (FileNotFoundException e) {
+        System.out.println("An error occurred!");
+        e.printStackTrace();
+    }
+}   
+
+   public static void main(String[]args){
+       createFile();
+       writeToFile();
+       readFileContents();
+       search();
+   } 
+}
